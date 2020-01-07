@@ -1,0 +1,29 @@
+Python Candlestick Chart
+Frances is asked to build a candlestick chart for her team to help everyone get an idea of how the daily pricing of AAPL changed over time, and what the price movements looked like during each day of trading.
+
+A candlestick chart plots the daily opening price, closing price, lowest price and highest price of a particular stock, and shows how that price changed each day over a given period of time. Each day is shown by one “candlestick,” and can be helpful when analysts are trying to make predictions about how a particular price of a stock may move in the future.
+
+
+import codecademylib3_seaborn
+import datetime
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from mpl_finance import candlestick_ohlc
+
+df = pd.read_csv('AAPL_data.csv')
+print(df.head())
+
+df['Date'] = pd.to_datetime(df['Date'])
+df["Date"] = df["Date"].apply(mdates.date2num)
+
+candle_data = df[['Date', 'Open', 'High', 'Low', 'Close']]
+print(candle_data.head())
+
+f1, ax = plt.subplots(figsize = (10,5))
+candlestick_ohlc(ax,candle_data.values, colorup='green', colordown='red')
+ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))
+plt.title('Candlestick Chart for AAPL')
+plt.xlabel('Date')
+plt.ylabel('Value($)')
+plt.show()
