@@ -1,0 +1,33 @@
+
+After feeling comfortable with her research, Frances needs to build a model portfolio with a basket of stocks, including AAPL, to present some recommendations to her team. She decides to construct her model portfolio with AAPL, Ford (NYSE: F), Dollar General (NYSE: DG), JetBlue (NASDAQ: JBLU) and Starbucks (NASDAQ: SBUX).
+
+Instead of going to a website to download information into csv format and using Excel to create her graphs, she decides to import stock information with quandl, and use pandas and numpy to perform calculations on her data, and matplotlib to plot her results. Frances will construct an “efficient frontier” to visualize the optimal portfolios of the five stocks she is looking into.
+
+import pandas as pd
+import matplotlib.pyplot as plt
+from rf import return_portfolios, optimal_portfolio
+import codecademylib3_seaborn
+import numpy as np
+
+path='quarters.csv'
+stock_data = pd.read_csv(path)
+print(stock_data.head())
+selected=list(stock_data.columns[1:])
+
+returns_quarterly = stock_data[selected].pct_change()
+expected_returns = returns_quarterly.mean()
+cov_quarterly = returns_quarterly.cov()
+
+random_portfolios = return_portfolios(expected_returns, cov_quarterly) 
+
+weights, returns, risks = optimal_portfolio(returns_quarterly[1:])
+
+random_portfolios.plot.scatter(x='Volatility', y='Returns', fontsize=12)
+try:
+	plt.plot(risks, returns, 'y-o')
+except:
+  pass
+plt.ylabel('Expected Returns',fontsize=14)
+plt.xlabel('Volatility (Std. Deviation)',fontsize=14)
+plt.title('Efficient Frontier', fontsize=24)
+plt.show()
