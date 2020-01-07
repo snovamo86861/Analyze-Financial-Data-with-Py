@@ -1,0 +1,47 @@
+## Calculating Net Present Value
+
+
+Frances is working with her team to evaluate two projects they are thinking about pursuing, but they can’t do both. Frances needs to help her team decide how to allocate their investment.
+
+Calculating the Net Present Value (NPV) will help us analyze the profitability of these two projects by giving us a present value of the future cash inflows and outflows over the life of both projects.
+
+Python can easily calculate the NPV of a set of cash flows. Since any NPV calculation is dependent on r, the rate at which we are discounting future cash flows to the present, it can be useful to calculate different NPVs at different discount rates, and build an NPV profile to see how the NPV of a project changes based upon the discount rate applied to the calculation.
+
+Frances is asked to create NPV profiles for two projects her team is evaluating to determine which project they should choose. SuperBank has $1,000,000 available to invest, and two clean energy projects available for investment that will generate annual cash flows over 20 years. By building and graphing an NPV Profile, she can easily see how discount rates affect both projects and help her team make a good decision.
+
+Project A is represented by the red line on the chart, and Project B is represented by the blue line.
+
+
+import codecademylib3_seaborn
+import matplotlib.pyplot as plt
+
+# Update Project A Cash Flows Here
+project_a = [-1000000, 0, 0, 50000, 50000, 200000, 250000, 250000, 250000, 250000, 375000, 375000, 375000, 375000, 375000, 250000, 250000, 250000, 250000, 100000]
+
+# Update Project B Cash Flows Here
+project_b = [-1000000, 50000, 50000, 50000, 50000, 250000, 500000, 500000, 500000, 500000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000, 100000]
+#Change the initial investment back to -1000000. At a discount rate of 6%, which project is more profitable? What about at 12%?
+discount_rate = [ 0.06, 0.065, 0.07, 0.075, 0.08, 0.085, 0.09, 0.095, 0.1, 0.105, 0.11, 0.115, 0.12]
+
+def calculate_npv(rate, cash_flow):
+    npv = 0
+    for t in range(len(cash_flow)):
+        npv += cash_flow[t]/(1+rate)**t
+    return npv
+
+npvs_a = list()
+npvs_b = list()
+for rate in discount_rate:
+  npv_a = calculate_npv(rate,project_a)
+  npvs_a.append(npv_a)
+  npv_b = calculate_npv(rate,project_b)
+  npvs_b.append(npv_b)
+  
+plt.plot(discount_rate,npvs_a, linewidth = 2.0, color = "red", label = "Project A")
+plt.plot(discount_rate,npvs_b, linewidth = 2.0, color = "blue", label = "Project B")
+plt.axhline(y=0, linewidth = 0.5, color = "black")
+plt.title('NPV Profile for Projects A and B')
+plt.xlabel('Discount Rate')
+plt.ylabel('Net Present Value')
+plt.legend()
+plt.show()
